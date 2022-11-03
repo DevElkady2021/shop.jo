@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Catagory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -71,9 +72,9 @@ class CatagoryController extends Controller
      */
     public function show(Catagory $catagory,$id,Request $request)
     {
-        $token = $request->token;
+   
         $catagory = Catagory::where('user_id',$id)->where('type',1)->get();
-        if($token){
+       
         if(count($catagory) < 1){
             return response()->json([
                 'message'=>__('messages.no data') 
@@ -85,18 +86,15 @@ class CatagoryController extends Controller
             ],200) ;
         }
 
-        }else{
-            return response()->json([
-                'message'=>__('messages.please login') 
-            ],400);
-        }
+       
     }
 
     public function sub_catagory(Catagory $catagory,$id,Request $request)
     {
-        $token = $request->token;
+
         $catagory = Catagory::where('user_id',$id)->where('type',2)->get();
-        if($token){
+
+       
         if(count($catagory) < 1){
             return response()->json([
                 'message'=>__('messages.no data') 
@@ -108,11 +106,8 @@ class CatagoryController extends Controller
             ],200) ;
         }
 
-        }else{
-            return response()->json([
-                'message'=>__('messages.please login') 
-            ],400);
-        }
+       
+        
     }
 
     /**

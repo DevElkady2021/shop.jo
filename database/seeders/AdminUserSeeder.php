@@ -30,7 +30,8 @@ class AdminUserSeeder extends Seeder
         'email'=>$user->email,
         'trade_name'=>$user->trade_name,
         'phone'=>'01000000000',
-        'img'=>'img.png',
+        'img'=>'http://localhost/shop.jo/public/man1.png',
+     // 'img'=>'http://shop.shop-jo.com/shop/public/man1.png', // serve
         'address'=>'Cairo',
         ]);
      

@@ -74,7 +74,7 @@ class AuthController extends Controller
         
         $validator = Validator::make($request->all(),$rules, [
             'name.required'          =>__('messages.The name is required'),
-            'trade_name.required'          =>__('messages.The trade_name is required'),
+            'trade_name.required'    =>__('messages.The trade_name is required'),
             'email.required'         =>__('messages.Email is requierd'),
             'email.unique'           =>__('messages.The email has already been taken'),
             'password.required'      =>__('messages.The password is required'),
@@ -95,7 +95,8 @@ class AuthController extends Controller
                     'email'=>$user->email,
                     'trade_name'=>$user->trade_name,
                     'phone'=>'01000000000',
-                    'img'=>'img.png',
+                    'img'=>'http://localhost/shop.jo/public/man1.png',
+                    // 'img'=>'http://shop.shop-jo.com/shop/public/man1.png', // serve
                     'address'=>'egypt',
                 ]);
                
@@ -112,25 +113,18 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout(Request $request) {
-        $token = $request ->token;
-        if($token){
-            auth()->logout();
-            return response()->json([
-         'message' =>   __('messages.You are Logged out')
-        ],200);
-        }else{
-            return response()->json([
-                'message' => __('messages.please login'),
-            ],400) ;
-        }
+    public function logout(Request $request) 
+    {
+        auth()->logout();
+        return response()->json([
+           'message' =>   __('messages.You are Logged out')],200);     
     }
 
     protected function createNewToken($token){
         return response()->json([
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
+            // 'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 500,
             'user' => auth()->user()
         ]);
     }

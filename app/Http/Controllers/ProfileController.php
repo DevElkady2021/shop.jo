@@ -12,24 +12,17 @@ class ProfileController extends Controller
   
     public function show(Request $request,$id)
     {
-            $token = $request ->token;
-            if($token){
+          
             $user = Profile::where('id',$id)->first();
-           if($user ==''){
-            return response()->json([
-                'message' => __('messages.please login')],400) ;
-           }
-           else{
+       
+        
             return response()->json([ 
                 'user'=>$user,
                 'message' => __('messages.Users'),
                 
             ],200) ;
-           }
-            }else{
-                return response()->json([
-                'message' => __('messages.please login')],400) ;
-            }
+        
+          
   
             }
 
@@ -54,8 +47,16 @@ class ProfileController extends Controller
         'trade_name'=>$request->trade_name,
         'phone'=>$request->phone,
         'img'=>'http://localhost/shop.jo/public/profile/'.$newfile,
+        // 'img'=>'http://shop.shop-jo.com/shop/public/profile/'.$newfile', // serve
         'address'=>$request->address,
      ]);
+
+     $user->update([
+        'name'=>$request->name,
+        'trade_name'=>$request->trade_name,
+        'password'=>bcrypt($request->password),
+     ]);
+
         return response()->json([
             'profile'=>$profile,
             'msg'=>__('messages.done'),

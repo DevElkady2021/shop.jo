@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Excel;
+use App\Imports\ProductImport;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Validator;
 
@@ -29,22 +31,6 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(ProductRequest $request)
     {
         if($request->hasfile('image')){
@@ -54,7 +40,8 @@ class ProductController extends Controller
         }
      $product = Product::create([
         'catagory_id'=>$request->catagory_id,
-        'image'=>'product/'.$newfile,
+        'image'=>'http://localhost/shop.jo/public/product'.$newfile,
+     // 'image'=>'http://shop.shop-jo.com/shop/public/product'.$newfile', // serve
         'name'=>$request->name,
         'status'=>$request->status,
         'description'=>$request->description,
@@ -82,33 +69,18 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        //
+        $product = Product::where('id',$id)->first(); 
+        return response()->json([
+            'product'=>$product??'No Data',
+            'msg'=>__('messages.done'),
+         ],200); 
+        
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request,$id)
     {
-       
-
         $product = Product::findOrFail($id); 
         $product->update([
             'catagory_id'=>$request->catagory_id,
@@ -147,4 +119,27 @@ class ProductController extends Controller
             'msg'=>__('messages.done'),
          ],200); 
     }
+
+
+
+
+    public function import(Request $request)
+    {
+        Excel::import(new ProductImport, $request->file);
+
+        return response()->json([
+            'msg'=>__('done')
+        ],200);
+    }
+
+
+    public function downloadExcel()
+    {
+        return response()->json([
+            'data'=>'http://localhost/shop.jo/public/products.csv',
+            'msg'=>__('messages.done'),
+        ],200);
+    }
+
+
 }

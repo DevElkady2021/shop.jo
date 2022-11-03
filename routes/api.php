@@ -32,7 +32,7 @@ Route::group([
 
 
 Route::group([
-    'middleware' => ['api','ChangeLanguage','token:api'],
+    'middleware' => ['api','ChangeLanguage'],
     'prefix' => 'auth'
 ], function () {
    
@@ -51,8 +51,13 @@ Route::group([
 
     Route::get('product',[ProductController::class,'index']);
     Route::post('product_store',[ProductController::class,'store']);
+    Route::get('product_show/{id}',[ProductController::class,'show']);
     Route::post('product_update/{id}',[ProductController::class,'update']);
     Route::get('product_delete/{id}',[ProductController::class,'destroy']);
+    Route::post('product_import',[ProductController::class,'import']);
+    Route::get('downloadExcel',[ProductController::class,'downloadExcel']);
+
+
 
 
 
